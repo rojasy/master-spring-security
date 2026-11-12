@@ -1,5 +1,6 @@
 package com.tas.masterSecurity;
 
+import com.tas.masterSecurity.entity.Role;
 import com.tas.masterSecurity.entity.User;
 import com.tas.masterSecurity.repositories.UserDetailsRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -17,10 +18,20 @@ public class Initializer {
                 User adminUser = new User();
                 adminUser.setUsername("admin");
                 adminUser.setPassword(passwordEncoder.encode("admin123"));
-                adminUser.setRole("ROLE_ADMIN");
+                adminUser.setRole(Role.ADMIN);
 
                 userDetailsRepository.save(adminUser);
                 System.out.println("Default admin user created");
+            }
+
+            if(userDetailsRepository.findByUsername("user").isEmpty()){
+                User normalUser = new User();
+                normalUser.setUsername("user");
+                normalUser.setPassword(passwordEncoder.encode("user123"));
+                normalUser.setRole(Role.USER);
+
+                userDetailsRepository.save(normalUser);
+                System.out.println("Default user created");
             }
         };
     }

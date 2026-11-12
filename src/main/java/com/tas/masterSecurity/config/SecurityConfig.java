@@ -1,10 +1,13 @@
 package com.tas.masterSecurity.config;
 
+import com.tas.masterSecurity.entity.Permission;
+import com.tas.masterSecurity.entity.Role;
 import com.tas.masterSecurity.filters.JWTAuthFilter;
 import com.tas.masterSecurity.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,7 +35,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth
                                 .requestMatchers("/authenticate").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/health").hasAuthority(Permission.TEST_READ.name())
                                 .anyRequest().authenticated());
+
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
